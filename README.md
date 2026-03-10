@@ -1,9 +1,9 @@
 # gitlabmcp
 
-[![CI](https://img.shields.io/github/actions/workflow/status/ilyalaletin/gitlabmcp/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/ilyalaletin/gitlabmcp/actions/workflows/ci.yml)
-[![Latest Release](https://img.shields.io/github/v/release/ilyalaletin/gitlabmcp?style=flat-square)](https://github.com/ilyalaletin/gitlabmcp/releases/latest)
-[![Go Version](https://img.shields.io/badge/go-1.24-00ADD8?style=flat-square&logo=go)](https://go.dev)
-[![License](https://img.shields.io/github/license/ilyalaletin/gitlabmcp?style=flat-square)](LICENSE)
+[![CI](https://img.shields.io/github/actions/workflow/status/ilyalaletin/gitlabmcp/ci.yml?branch=main)](https://github.com/ilyalaletin/gitlabmcp/actions/workflows/ci.yml)
+[![Latest Release](https://img.shields.io/github/release/ilyalaletin/gitlabmcp)](https://github.com/ilyalaletin/gitlabmcp/releases/latest)
+[![Go Version](https://img.shields.io/badge/go-1.24-00ADD8?logo=go)](https://go.dev)
+[![License](https://img.shields.io/github/license/ilyalaletin/gitlabmcp)](LICENSE)
 
 An [MCP](https://modelcontextprotocol.io/) server for GitLab, providing 57 tools across 10 domains for seamless GitLab integration with Claude, Claude Desktop, Cursor, and other MCP-compatible clients.
 
