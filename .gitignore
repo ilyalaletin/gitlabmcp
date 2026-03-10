@@ -1,3 +1,4 @@
 gitlabmcp
 *.exe
 .env
+dist/
