@@ -7,6 +7,7 @@ import (
 
 	"github.com/ilya/gitlabmcp/internal/client"
 	"github.com/ilya/gitlabmcp/internal/config"
+	"github.com/ilya/gitlabmcp/internal/deploy"
 	"github.com/ilya/gitlabmcp/internal/groups"
 	"github.com/ilya/gitlabmcp/internal/issues"
 	"github.com/ilya/gitlabmcp/internal/mr"
@@ -44,6 +45,7 @@ func main() {
 	)
 
 	// Domain registrations
+	deploy.Register(s, gl)
 	groups.Register(s, gl)
 	issues.Register(s, gl)
 	mr.Register(s, gl)
