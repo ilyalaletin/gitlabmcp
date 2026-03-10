@@ -7,6 +7,7 @@ import (
 
 	"github.com/ilya/gitlabmcp/internal/client"
 	"github.com/ilya/gitlabmcp/internal/config"
+	"github.com/ilya/gitlabmcp/internal/issues"
 	"github.com/mark3labs/mcp-go/server"
 )
 
@@ -36,8 +37,8 @@ func main() {
 		server.WithToolCapabilities(false),
 	)
 
-	// Domain registrations will be added here as each domain is implemented
-	_ = gl
+	// Domain registrations
+	issues.Register(s, gl)
 
 	slog.Info("starting gitlabmcp", "version", version, "gitlab_url", cfg.URL)
 
