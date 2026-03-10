@@ -2,7 +2,7 @@
 
 ## Overview
 
-MCP server in Go that provides tools for interacting with GitLab API via stdio transport. Covers issues, merge requests, pipelines, runners, projects, deploy, releases, and container registry.
+MCP server in Go that provides tools for interacting with GitLab API via stdio transport. Covers issues, merge requests, pipelines, runners, projects, groups, repositories, deploy, releases, and container registry.
 
 ## Tech Stack
 
@@ -47,6 +47,12 @@ gitlabmcp/
 │   ├── projects/
 │   │   ├── tools.go
 │   │   └── handlers.go
+│   ├── groups/
+│   │   ├── tools.go
+│   │   └── handlers.go
+│   ├── repositories/
+│   │   ├── tools.go
+│   │   └── handlers.go
 │   ├── deploy/
 │   │   ├── tools.go
 │   │   └── handlers.go
@@ -66,6 +72,20 @@ gitlabmcp/
 - `client` creates `*gitlab.Client` once, shared across all domains
 - Each domain package exports `Register(server, client)` to register its tools
 - `main.go`: init config -> client -> MCP server -> call Register for each domain -> start stdio
+- `internal/handler/` — shared helpers for parameter extraction, validation, pagination, error formatting
+- Logging goes to stderr (stdout is reserved for MCP stdio transport). Use `log/slog` with JSON output.
+
+## Common Parameter Patterns
+
+All tools follow these conventions:
+
+- **`project_id`** (string, required on most tools): accepts `"owner/repo"` path or numeric ID as string. Resolved in the shared `client` wrapper — handlers always pass a string, the wrapper handles the rest.
+- **`page`** (int, optional, default 1): page number for list tools.
+- **`per_page`** (int, optional, default 20, max 100): items per page for list tools.
+- **`list_*` tools** always accept `page` and `per_page` in addition to domain-specific filters.
+- **`get_*` tools** require the resource ID (e.g., `issue_iid`, `merge_request_iid`, `pipeline_id`).
+- **`create_*` tools** require the mandatory fields as per GitLab API; optional fields are optional parameters.
+- **`update_*` tools** require resource ID; all other fields are optional (only changed fields are sent).
 
 ## Tools
 
@@ -89,7 +109,7 @@ gitlabmcp/
 | `get_merge_request` | Get MR by ID |
 | `create_merge_request` | Create MR |
 | `update_merge_request` | Update MR |
-| `merge_merge_request` | Merge MR |
+| `accept_merge_request` | Merge (accept) MR |
 | `approve_merge_request` | Approve MR |
 | `list_mr_notes` | List MR comments |
 | `create_mr_note` | Add comment to MR |
@@ -120,7 +140,7 @@ gitlabmcp/
 | `disable_runner` | Disable runner for project |
 | `delete_runner` | Delete runner |
 
-### Projects & Groups (6 tools)
+### Projects (6 tools)
 
 | Tool | Description |
 |------|-------------|
@@ -130,6 +150,25 @@ gitlabmcp/
 | `list_project_members` | List project members |
 | `list_project_webhooks` | List webhooks |
 | `create_project_webhook` | Create webhook |
+
+### Groups (4 tools)
+
+| Tool | Description |
+|------|-------------|
+| `list_groups` | List groups with search |
+| `get_group` | Get group by ID/path |
+| `list_group_projects` | List projects in a group |
+| `list_group_members` | List group members |
+
+### Repositories (5 tools)
+
+| Tool | Description |
+|------|-------------|
+| `list_branches` | List repository branches |
+| `get_file` | Get file content from repository (by path and ref) |
+| `list_repository_tree` | List files/dirs in repository tree |
+| `list_commits` | List commits with filters (ref, path, since, until) |
+| `get_commit` | Get commit details by SHA |
 
 ### Deploy & Environments (5 tools)
 
@@ -157,12 +196,12 @@ gitlabmcp/
 | `list_registry_tags` | List tags |
 | `delete_registry_tag` | Delete tag |
 
-**Total: ~45 tools.** All tools take `project_id` (string, `owner/repo` or numeric ID) as required parameter, except global ones like `list_runners`.
+**Total: 57 tools.** Most tools take `project_id` (string) as required parameter. Exceptions: group tools take `group_id`, runner global list takes no project, `get_runner`/`delete_runner` take `runner_id`.
 
 ## Error Handling
 
 - GitLab API errors (401, 403, 404, 429) are translated to readable MCP error responses
-- Rate limiting (429): return error with "rate limited, retry later" message, no automatic retries
+- Rate limiting (429): return error including the `Retry-After` header value so the caller knows when to retry
 - Invalid parameters: validation at handler level with clear messages ("project_id is required")
 
 ## Response Format
@@ -170,3 +209,22 @@ gitlabmcp/
 - Tools return JSON — structured data convenient for LLM consumption
 - Lists include pagination: `items` + `total_count` + `page` + `per_page`
 - Default `per_page` = 20 to avoid overloading LLM context
+
+## Logging
+
+- Use `log/slog` with JSON handler writing to **stderr** (stdout is reserved for MCP stdio transport)
+- Log levels: INFO for startup/shutdown, WARN for recoverable errors, ERROR for failures
+- Each tool call logs: tool name, project_id, duration, success/error
+
+## Testing Strategy
+
+- **Unit tests:** Each domain package gets `handlers_test.go` with mocked `*gitlab.Client`. Use interfaces to abstract the GitLab client methods each domain needs — test handlers against mock implementations.
+- **Integration tests:** Optional, behind `GITLAB_INTEGRATION_TEST=1` build tag. Run against a real GitLab instance using a test project. Not required for CI.
+- **MCP protocol tests:** Use `mcp-go`'s test utilities to verify tool registration, parameter validation, and response format.
+- **Test structure:** Tests live alongside the code they test (`internal/issues/handlers_test.go`).
+
+## Build
+
+- `go build -o gitlabmcp ./cmd/gitlabmcp`
+- Version injected via ldflags: `-ldflags "-X main.version=$(git describe --tags)"`
+- Makefile with targets: `build`, `test`, `lint`
