@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ilya/gitlabmcp/internal/handler"
+	"github.com/ilyalaletin/gitlabmcp/internal/handler"
 	"github.com/mark3labs/mcp-go/mcp"
 	gitlab "gitlab.com/gitlab-org/api/client-go"
 )

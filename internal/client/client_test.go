@@ -3,7 +3,7 @@ package client
 import (
 	"testing"
 
-	"github.com/ilya/gitlabmcp/internal/config"
+	"github.com/ilyalaletin/gitlabmcp/internal/config"
 )
 
 func TestNew_DefaultURL(t *testing.T) {

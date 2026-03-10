@@ -1,7 +1,7 @@
 package client
 
 import (
-	"github.com/ilya/gitlabmcp/internal/config"
+	"github.com/ilyalaletin/gitlabmcp/internal/config"
 	gitlab "gitlab.com/gitlab-org/api/client-go"
 )
 

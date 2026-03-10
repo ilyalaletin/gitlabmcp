@@ -1,4 +1,4 @@
-module github.com/ilya/gitlabmcp
+module github.com/ilyalaletin/gitlabmcp
 
 go 1.24.2
 
