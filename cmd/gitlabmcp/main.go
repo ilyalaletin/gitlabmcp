@@ -12,6 +12,7 @@ import (
 	"github.com/ilya/gitlabmcp/internal/mr"
 	"github.com/ilya/gitlabmcp/internal/pipelines"
 	"github.com/ilya/gitlabmcp/internal/projects"
+	"github.com/ilya/gitlabmcp/internal/repositories"
 	"github.com/ilya/gitlabmcp/internal/runners"
 	"github.com/mark3labs/mcp-go/server"
 )
@@ -48,6 +49,7 @@ func main() {
 	mr.Register(s, gl)
 	pipelines.Register(s, gl)
 	projects.Register(s, gl)
+	repositories.Register(s, gl)
 	runners.Register(s, gl)
 
 	slog.Info("starting gitlabmcp", "version", version, "gitlab_url", cfg.URL)
