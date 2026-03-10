@@ -9,6 +9,7 @@ import (
 	"github.com/ilya/gitlabmcp/internal/config"
 	"github.com/ilya/gitlabmcp/internal/issues"
 	"github.com/ilya/gitlabmcp/internal/mr"
+	"github.com/ilya/gitlabmcp/internal/pipelines"
 	"github.com/mark3labs/mcp-go/server"
 )
 
@@ -41,6 +42,7 @@ func main() {
 	// Domain registrations
 	issues.Register(s, gl)
 	mr.Register(s, gl)
+	pipelines.Register(s, gl)
 
 	slog.Info("starting gitlabmcp", "version", version, "gitlab_url", cfg.URL)
 
