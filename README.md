@@ -1,9 +1,9 @@
 # gitlabmcp
 
-[![CI](https://img.shields.io/github/actions/workflow/status/ilya/gitlabmcp/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/ilya/gitlabmcp/actions/workflows/ci.yml)
-[![Latest Release](https://img.shields.io/github/v/release/ilya/gitlabmcp?style=flat-square)](https://github.com/ilya/gitlabmcp/releases/latest)
+[![CI](https://img.shields.io/github/actions/workflow/status/ilyalaletin/gitlabmcp/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/ilyalaletin/gitlabmcp/actions/workflows/ci.yml)
+[![Latest Release](https://img.shields.io/github/v/release/ilyalaletin/gitlabmcp?style=flat-square)](https://github.com/ilyalaletin/gitlabmcp/releases/latest)
 [![Go Version](https://img.shields.io/badge/go-1.24-00ADD8?style=flat-square&logo=go)](https://go.dev)
-[![License](https://img.shields.io/github/license/ilya/gitlabmcp?style=flat-square)](LICENSE)
+[![License](https://img.shields.io/github/license/ilyalaletin/gitlabmcp?style=flat-square)](LICENSE)
 
 An [MCP](https://modelcontextprotocol.io/) server for GitLab, providing 57 tools across 10 domains for seamless GitLab integration with Claude, Claude Desktop, Cursor, and other MCP-compatible clients.
 
@@ -18,11 +18,11 @@ An [MCP](https://modelcontextprotocol.io/) server for GitLab, providing 57 tools
 
 **Option 1: Pre-built binary**
 
-Download the latest release from [GitHub Releases](https://github.com/ilya/gitlabmcp/releases):
+Download the latest release from [GitHub Releases](https://github.com/ilyalaletin/gitlabmcp/releases):
 
 ```bash
 # macOS/Linux
-wget https://github.com/ilya/gitlabmcp/releases/latest/download/gitlabmcp_v0.1.0_darwin_amd64.tar.gz
+wget https://github.com/ilyalaletin/gitlabmcp/releases/latest/download/gitlabmcp_v0.1.0_darwin_amd64.tar.gz
 tar xzf gitlabmcp_v0.1.0_darwin_amd64.tar.gz
 chmod +x gitlabmcp
 mv gitlabmcp /usr/local/bin/
@@ -31,7 +31,7 @@ mv gitlabmcp /usr/local/bin/
 **Option 2: Build from source**
 
 ```bash
-go install github.com/ilya/gitlabmcp/cmd/gitlabmcp@latest
+go install github.com/ilyalaletin/gitlabmcp/cmd/gitlabmcp@latest
 ```
 
 ### Environment Variables
